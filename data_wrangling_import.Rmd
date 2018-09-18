@@ -72,3 +72,12 @@ pups_data = read_csv("./data/data_import_examples/FAS_pups.csv", col_types = "ci
 skimr::skim(pups_data)
 ```
 
+If the file is not a csv:
+```{r}
+library(readxl)
+mlb_data = read_excel("data/data_import_examples/mlb11.xlsx", n_max = 20)
+
+mlb_subset = readxl::read_excel("data/data_import_examples/mlb11.xlsx", n_max = 20,
+                                range = "A1:E17")
+```
+
