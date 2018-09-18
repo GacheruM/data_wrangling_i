@@ -7,3 +7,25 @@ output: html_document
 library(tidyverse)
 ```
 
+Import FAS csv files
+
+*Importing FAS litters file
+```{r}
+#do not use read.csv
+#use the relative directory - file within the working directory
+
+litters_data = read_csv(file="./data/data_import_examples/FAS_litters.csv")
+
+#cleans up variable names - remove spaces
+litters_data = janitor::clean_names(litters_data)
+```
+
+*Importing FAS pups file
+```{r}
+pups_data = read_csv(file="./data/data_import_examples/FAS_pups.csv")
+
+#cleans up variable names - remove spaces
+pups_data = janitor::clean_names(pups_data)
+```
+
+
