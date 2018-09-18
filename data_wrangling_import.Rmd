@@ -72,12 +72,30 @@ pups_data = read_csv("./data/data_import_examples/FAS_pups.csv", col_types = "ci
 skimr::skim(pups_data)
 ```
 
-If the file is not a csv:
+If the file is not a csv (.xlsx):
 ```{r}
 library(readxl)
 mlb_data = read_excel("data/data_import_examples/mlb11.xlsx", n_max = 20)
 
 mlb_subset = readxl::read_excel("data/data_import_examples/mlb11.xlsx", n_max = 20,
                                 range = "A1:E17")
+```
+
+If the file is not in excel (.sas):
+```{r}
+library(haven)
+pulse_data = read_sas("./data/data_import_examples/public_pulse_data.sas7bdat")
+```
+
+##Compare with base R
+
+```{r}
+#produces a tibble
+pups_readr = read_csv(file = "./data/data_import_examples/FAS_pups.csv")
+
+#produces a data frame (will print out all the rows and columns, guesses variable by the first letter when subsetting )
+pups_baser = read.csv(file = "./data/data_import_examples/FAS_pups.csv")
+pups_baser
+pups_baser$S
 ```
 
