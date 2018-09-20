@@ -54,7 +54,7 @@ select(litters_data, group, litter_number, gest_day_0_weight = gd0_weight)
 rename(litters_data, gest_day_0_weight = gd0_weight)
 ```
 
-...use select helpers
+...use select helpers (rename)
 
 ```{r}
 select(litters_data, starts_with('gd')) #column names that start with gd
@@ -72,12 +72,25 @@ select(pups_data, litter_number, sex, pd_ears)
 
 ##Filter observations (picking what rows you want)
 
+Do some filtering
 ```{r}
+filter(litters_data, gd0_weight < 25)
 
+filter(litters_data, group %in% c("Con7", "Con8"))
+filter(litters_data, group == "Con7" | group == "Con8")
+
+filter(litters_data, pups_born_alive == 8)
+
+filter(litters_data, !is.na(gd0_weight))
+
+filter(litters_data, pups_born_alive %in% 4:6, !is.na(gd0_weight))
 ```
 
-
-
+Learning Assessment: Filter to include only pups with sex 1 and filter to include only pups with PD walk less than 11 and sex 2
+```{r}
+filter(pups_data, sex == 1)
+filter(pups_data, pd_walk < 11, sex == 2)
+```
 
 
 Pipes are easier to understand and avoids clutter (avoid nested functions/operations)
