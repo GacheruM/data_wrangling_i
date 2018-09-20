@@ -93,4 +93,36 @@ filter(pups_data, pd_walk < 11, sex == 2)
 ```
 
 
-Pipes are easier to understand and avoids clutter (avoid nested functions/operations)
+##Mutate
+
+Create variables
+
+```{r}
+mutate(litters_data,
+       wt_gain = gd18_weight - gd0_weight,
+       group = tolower(group) #change variable name to lower case
+       )
+
+mutate(litters_data,
+       wt_gain = gd18_weight - gd0_weight,
+       wt_gain_squared = wt_gain^2)
+
+
+```
+
+
+##Arrange
+
+Arrange the data
+
+```{r}
+arrange(litters_data, gd0_weight)
+
+arrange(litters_data, desc(pups_born_alive), gd0_weight)
+
+```
+
+
+
+
+Pipes are easier to understand and avoids clutter (avoid nested or intermediate functions/operations)
