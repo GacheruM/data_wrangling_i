@@ -163,7 +163,6 @@ litters_data =
     wt_gain = gd18_weight - gd0_weight,
     group = tolower(group))
 
-litters_data
 ```
 
 Pipes are easier to understand and avoids clutter (avoid nested or intermediate functions/operations). %>% takes the output in the current line and becomes the first input/argument in the next line. 
@@ -182,7 +181,6 @@ litters_data =
   filter(!is.na(gd0_weight)) %>%
   lm(gd18_weight ~ gd0_weight, data = .) #use . to specify where the argument should go
  
-
-litters_data
 ```
 
+There are limitations to piping - they are extremely sequential: would not work if trying to clean two datasets and merge them.
