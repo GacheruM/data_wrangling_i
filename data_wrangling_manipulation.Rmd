@@ -123,6 +123,66 @@ arrange(litters_data, desc(pups_born_alive), gd0_weight)
 ```
 
 
+##Using pipes
 
+Example of intermediate object approach (not easy to read):
 
-Pipes are easier to understand and avoids clutter (avoid nested or intermediate functions/operations)
+```{r}
+litters_data_raw = read_csv("./data/data_import_examples/FAS_litters.csv",
+  col_types = "ccddiiii")
+litters_data_clean_names = janitor::clean_names(litters_data_raw)
+litters_data_selected_cols = select(litters_data_clean_names, -pups_survive)
+litters_data_with_vars = mutate(litters_data_selected_cols, 
+  wt_gain = gd18_weight - gd0_weight,
+  group = tolower(group))
+```
+
+Example of nested object approach (not easy to read):
+
+```{r}
+  mutate(
+    select(
+      janitor::clean_names(
+        read_csv("./data/data_import_examples/FAS_litters.csv", col_types = "ccddiiii")
+        ), 
+    -pups_survive
+    ),
+  wt_gain = gd18_weight - gd0_weight,
+  group = tolower(group)
+  )
+```
+
+Use piping:
+
+```{r}
+litters_data = 
+  read_csv("./data/data_import_examples/FAS_litters.csv", col_types = "ccddiiii") %>%
+  janitor::clean_names() %>%
+  select(-pups_survive) %>%
+  mutate(
+    wt_gain = gd18_weight - gd0_weight,
+    group = tolower(group))
+
+litters_data
+```
+
+Pipes are easier to understand and avoids clutter (avoid nested or intermediate functions/operations). %>% takes the output in the current line and becomes the first input/argument in the next line. 
+
+If output is not the first argument in the next function (use a "." as placeholder) :
+
+```{r}
+litters_data = 
+  read_csv("./data/data_import_examples/FAS_litters.csv", col_types = "ccddiiii") %>%
+  janitor::clean_names() %>%
+  select(-pups_survive) %>%
+  mutate(
+    wt_gain = gd18_weight - gd0_weight,
+    group = tolower(group)
+    ) %>%
+  filter(!is.na(gd0_weight)) %>%
+  lm(gd18_weight ~ gd0_weight, data = .) #use . to specify where the argument should go
+ 
+
+litters_data
+```
+
