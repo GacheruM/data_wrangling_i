@@ -9,3 +9,38 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
+
+Import pulse data
+
+```{r}
+library(tidyverse)
+pulse_data = haven::read_sas("./data/data_import_examples/public_pulse_data.sas7bdat") %>%
+  janitor::clean_names()
+pulse_data
+```
+
+With our new understanding of tidy data, we quickly recognize a problem: the BDI score is spread across four columns, which correspond to four observation times. We want each patient to have four rows (turn column names into observations). 
+
+```{r}
+pulse_tidy_data = gather(pulse_data, key = visit, value = bdi, bdi_score_bl:bdi_score_12m)
+```
+
+Illustrate 'separate - split visit into separate columns
+```{r}
+separate(pulse_tidy_data, visit, into = c("bdi_str", "score_str", "visit"), sep = "_") %>%
+  select(-bdi_str, -score_str) %>%
+  mutate(visit = replace(visit, visit == "bl", "00m"))
+
+```
+
+Putting it all together - doing all the data cleaning at once
+
+```{r}
+pulse_data = haven::read_sas("./data/data_import_examples/public_pulse_data.sas7bdat") %>%
+  janitor::clean_names() %>%
+  gather(key = visit, value = bdi, bdi_score_bl:bdi_score_12m) %>%
+  separate(visit, into = c("remove_1", "remove_2", "visit"), sep = "_") %>%
+  select(id, visit, everything(), -starts_with("remove")) %>%
+  mutate(visit = replace(visit, visit == "bl", "00m"))
+```
+
